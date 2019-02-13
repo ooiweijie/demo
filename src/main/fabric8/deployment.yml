@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+spec:
+  template:
+    spec:
+      hostAliases:
+      - ip: 103.208.214.155
+        hostnames:
+        - intapigw-dev-clientcrt.se.scb.co.th
+      containers:
+      - env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: local
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8888
+            scheme: HTTP
+          initialDelaySeconds: 200
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8888
+            scheme: HTTP
+          initialDelaySeconds: 200
+        ports:
+        - containerPort: 8888
+          name: java
+          protocol: TCP
